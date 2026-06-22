@@ -1,0 +1,14 @@
+- Always use TypeScript with strict types, no `any`
+- Use Next.js App Router server components by default
+- Use `'use client'` only when hooks or browser APIs are needed
+- Use Zod for all API route input validation
+- Use React Query for all client-side data fetching and mutations
+- All AI prompts must live in /lib/prompts.ts — never inline them
+- Handle loading, error, and empty states for every component
+- Use Tailwind CSS only — no inline styles
+- shadcn/ui for all UI primitives (Button, Dialog, Drawer, Select, etc.)
+- Prisma for all DB access — never raw SQL
+- All API routes return { data, error } shaped responses
+- Use next/font for all custom fonts
+- Platform colors: Instagram=#E1306C, TikTok=#000000, LinkedIn=#0A66C2, Facebook=#1877F2, Twitter=#1DA1F2
+- Status colors: IDEA=#6B7280, PLANNED=#F59E0B, DESIGNING=#8B5CF6, READY=#10B981, PUBLISHED=#06B6D4

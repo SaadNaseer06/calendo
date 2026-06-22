@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Calendo
 
-## Getting Started
+AI-powered Social Media Marketing Management platform — plan content on a calendar, generate posts with Groq AI, export for designers, and share read-only links.
 
-First, run the development server:
+**100% free stack** — no paid APIs required for development.
+
+## Quick start
+
+1. Copy environment variables:
+
+```bash
+cp .env.example .env.local
+```
+
+2. Fill in (minimum for local dev):
+
+- `NEXTAUTH_SECRET` — any random string for local dev
+- `GROQ_API_KEY` — [console.groq.com](https://console.groq.com) (free, optional for AI features)
+
+3. Initialize database:
+
+```bash
+npx prisma db push
+```
+
+4. Run the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Email sign-in (NextAuth credentials — no password, dev-friendly)
+- Multi-brand dashboard
+- Monthly calendar with drag-and-drop rescheduling
+- AI Studio: monthly plans, single posts, caption rewriter, trend scout
+- CSV export and shareable designer links
+- Dark editorial UI (Syne + DM Sans)
 
-## Learn More
+## Tech stack
 
-To learn more about Next.js, take a look at the following resources:
+Next.js 14 · Prisma · SQLite (local) / Supabase (prod) · Groq · Tailwind · shadcn/ui · TanStack Query
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Production
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Deploy on [Vercel](https://vercel.com)
+- Use Supabase PostgreSQL — set `DATABASE_URL` and change `provider` in `prisma/schema.prisma` to `postgresql`
+- Add all env vars from `.env.example`
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*From content chaos to calendar clarity.*
