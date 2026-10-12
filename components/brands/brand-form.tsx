@@ -23,6 +23,10 @@ interface BrandFormProps {
     niche: string;
     description?: string;
     brandVoice?: string;
+    logoUrl?: string;
+    websiteUrl?: string;
+    ga4MeasurementId?: string;
+    ga4PropertyId?: string;
     contentPillars: string[];
     platforms: string[];
   }) => Promise<void>;
@@ -34,6 +38,10 @@ export function BrandForm({ initial, onSubmit, submitLabel = "Save Brand" }: Bra
   const [niche, setNiche] = useState(initial?.niche ?? "");
   const [description, setDescription] = useState(initial?.description ?? "");
   const [brandVoice, setBrandVoice] = useState(initial?.brandVoice ?? "");
+  const [logoUrl, setLogoUrl] = useState(initial?.logoUrl ?? "");
+  const [websiteUrl, setWebsiteUrl] = useState(initial?.websiteUrl ?? "");
+  const [ga4MeasurementId, setGa4MeasurementId] = useState(initial?.ga4MeasurementId ?? "");
+  const [ga4PropertyId, setGa4PropertyId] = useState(initial?.ga4PropertyId ?? "");
   const [pillars, setPillars] = useState<string[]>(initial?.contentPillars ?? []);
   const [platforms, setPlatforms] = useState<string[]>(initial?.platforms ?? []);
   const [loading, setLoading] = useState(false);
@@ -51,6 +59,10 @@ export function BrandForm({ initial, onSubmit, submitLabel = "Save Brand" }: Bra
         niche,
         description: description || undefined,
         brandVoice: brandVoice || undefined,
+        logoUrl: logoUrl || undefined,
+        websiteUrl: websiteUrl || undefined,
+        ga4MeasurementId: ga4MeasurementId || undefined,
+        ga4PropertyId: ga4PropertyId || undefined,
         contentPillars: pillars,
         platforms,
       });
@@ -90,6 +102,42 @@ export function BrandForm({ initial, onSubmit, submitLabel = "Save Brand" }: Bra
           value={brandVoice}
           onChange={(e) => setBrandVoice(e.target.value)}
           placeholder="e.g. fun and witty"
+          className="bg-[var(--bg-elevated)]"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label>Logo URL (optional)</Label>
+        <Input
+          value={logoUrl}
+          onChange={(e) => setLogoUrl(e.target.value)}
+          placeholder="https://example.com/logo.png"
+          className="bg-[var(--bg-elevated)]"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label>Website URL</Label>
+        <Input
+          value={websiteUrl}
+          onChange={(e) => setWebsiteUrl(e.target.value)}
+          placeholder="https://yourcompany.com"
+          className="bg-[var(--bg-elevated)]"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label>GA4 Measurement ID (optional)</Label>
+        <Input
+          value={ga4MeasurementId}
+          onChange={(e) => setGa4MeasurementId(e.target.value)}
+          placeholder="G-XXXXXXXXXX"
+          className="bg-[var(--bg-elevated)]"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label>GA4 Property ID (optional)</Label>
+        <Input
+          value={ga4PropertyId}
+          onChange={(e) => setGa4PropertyId(e.target.value)}
+          placeholder="123456789"
           className="bg-[var(--bg-elevated)]"
         />
       </div>

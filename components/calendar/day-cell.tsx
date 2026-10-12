@@ -12,9 +12,17 @@ interface DayCellProps {
   posts: Post[];
   onDayClick: (date: Date) => void;
   onPostClick: (post: Post) => void;
+  onOverflowClick?: (date: Date, posts: Post[]) => void;
 }
 
-export function DayCell({ date, month, posts, onDayClick, onPostClick }: DayCellProps) {
+export function DayCell({
+  date,
+  month,
+  posts,
+  onDayClick,
+  onPostClick,
+  onOverflowClick,
+}: DayCellProps) {
   const dayId = format(date, "yyyy-MM-dd");
   const inMonth = isSameMonth(date, month);
   const visible = posts.slice(0, 3);
@@ -49,7 +57,16 @@ export function DayCell({ date, month, posts, onDayClick, onPostClick }: DayCell
               <PostCard key={post.id} post={post} index={index} onClick={() => onPostClick(post)} />
             ))}
             {overflow > 0 && (
-              <p className="text-center text-[10px] text-[var(--text-secondary)]">+{overflow} more</p>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOverflowClick?.(date, posts);
+                }}
+                className="w-full rounded py-0.5 text-center text-[10px] font-medium text-[var(--accent-brand)] hover:bg-[var(--accent-glow)]"
+              >
+                +{overflow} more
+              </button>
             )}
           </div>
           {provided.placeholder}

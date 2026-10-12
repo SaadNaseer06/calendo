@@ -13,6 +13,9 @@ export function serializeBrand(b: PrismaBrand): Brand {
     contentPillars: parseJsonArray(b.contentPillars),
     platforms: parseJsonArray(b.platforms),
     logoUrl: b.logoUrl,
+    websiteUrl: b.websiteUrl,
+    ga4MeasurementId: b.ga4MeasurementId,
+    ga4PropertyId: b.ga4PropertyId,
     userId: b.userId,
     createdAt: b.createdAt.toISOString(),
   };

@@ -9,12 +9,14 @@ import {
   Sparkles,
   Building2,
   LogOut,
+  BarChart3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/calendar", label: "Calendar", icon: Calendar },
   { href: "/ai-studio", label: "AI Studio", icon: Sparkles },
   { href: "/brands", label: "Brands", icon: Building2 },

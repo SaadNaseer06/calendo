@@ -23,7 +23,7 @@ import {
   type Platform,
   type PostStatus,
 } from "@/lib/constants";
-import type { Post } from "@/types";
+import type { Post, Brand } from "@/types";
 import { cn } from "@/lib/utils";
 
 const fieldClass =
@@ -37,6 +37,7 @@ interface PostDrawerProps {
   onOpenChange: (open: boolean) => void;
   post: Partial<Post> | null;
   brandId: string;
+  brand?: Pick<Brand, "niche" | "brandVoice">;
   defaultDate?: Date;
   onSaved: () => void;
 }
@@ -91,6 +92,7 @@ export function PostDrawer({
   onOpenChange,
   post,
   brandId,
+  brand,
   defaultDate,
   onSaved,
 }: PostDrawerProps) {
@@ -185,23 +187,29 @@ export function PostDrawer({
 
   const duplicate = async () => {
     if (!post?.id) return;
-    await fetch("/api/posts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        brandId,
-        title: `${title} (copy)`,
-        caption,
-        hashtags,
-        platforms,
-        postType,
-        scheduledAt: new Date(scheduledAt).toISOString(),
-        status: "IDEA",
-        designerNote,
-      }),
-    });
-    toast.success("Post duplicated");
-    onSaved();
+    try {
+      const res = await fetch("/api/posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          brandId,
+          title: `${title} (copy)`,
+          caption,
+          hashtags,
+          platforms,
+          postType,
+          scheduledAt: new Date(scheduledAt).toISOString(),
+          status: "IDEA",
+          designerNote,
+        }),
+      });
+      const json = (await res.json()) as { error: string | null };
+      if (!res.ok || json.error) throw new Error(json.error ?? "Failed to duplicate");
+      toast.success("Post duplicated");
+      onSaved();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to duplicate");
+    }
   };
 
   const regenerate = async () => {
@@ -212,7 +220,8 @@ export function PostDrawer({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          niche: "general",
+          niche: brand?.niche ?? "Business",
+          brandVoice: brand?.brandVoice ?? "engaging",
           platform: platforms[0] ?? "INSTAGRAM",
           postType,
           topic: title,

@@ -9,6 +9,9 @@ export interface Brand {
   contentPillars: string[];
   platforms: string[];
   logoUrl: string | null;
+  websiteUrl: string | null;
+  ga4MeasurementId: string | null;
+  ga4PropertyId: string | null;
   userId: string;
   createdAt: string;
 }

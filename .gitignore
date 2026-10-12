@@ -26,7 +26,16 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
 .env*.local
+!.env.example
+
+# local sqlite leftovers (project now uses Supabase Postgres)
+*.db
+*.db-journal
+/data/
+/prisma/*.db
+/prisma/*.db-journal
 
 # vercel
 .vercel

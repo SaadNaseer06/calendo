@@ -12,6 +12,9 @@ const updateSchema = z.object({
   contentPillars: z.array(z.string()).optional(),
   platforms: z.array(z.string()).optional(),
   logoUrl: z.string().nullable().optional(),
+  websiteUrl: z.union([z.string().url(), z.literal("")]).nullable().optional(),
+  ga4MeasurementId: z.string().nullable().optional(),
+  ga4PropertyId: z.string().nullable().optional(),
 });
 
 async function getOwnedBrand(id: string, userId: string) {
@@ -50,6 +53,11 @@ export async function PATCH(
         ...(body.description !== undefined ? { description: body.description } : {}),
         ...(body.brandVoice !== undefined ? { brandVoice: body.brandVoice } : {}),
         ...(body.logoUrl !== undefined ? { logoUrl: body.logoUrl } : {}),
+        ...(body.websiteUrl !== undefined ? { websiteUrl: body.websiteUrl || null } : {}),
+        ...(body.ga4MeasurementId !== undefined
+          ? { ga4MeasurementId: body.ga4MeasurementId || null }
+          : {}),
+        ...(body.ga4PropertyId !== undefined ? { ga4PropertyId: body.ga4PropertyId || null } : {}),
         ...(body.contentPillars
           ? { contentPillars: stringifyJsonArray(body.contentPillars) }
           : {}),

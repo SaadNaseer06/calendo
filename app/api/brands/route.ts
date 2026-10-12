@@ -12,6 +12,9 @@ const createSchema = z.object({
   contentPillars: z.array(z.string()).default([]),
   platforms: z.array(z.string()).default([]),
   logoUrl: z.string().optional(),
+  websiteUrl: z.union([z.string().url(), z.literal("")]).optional(),
+  ga4MeasurementId: z.string().optional(),
+  ga4PropertyId: z.string().optional(),
 });
 
 export async function GET() {

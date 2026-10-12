@@ -20,6 +20,7 @@ interface CalendarGridProps {
   onDayClick: (date: Date) => void;
   onPostClick: (post: Post) => void;
   onReschedule: (postId: string, newDate: Date) => void;
+  onOverflowClick?: (date: Date, posts: Post[]) => void;
 }
 
 export function CalendarGrid({
@@ -28,6 +29,7 @@ export function CalendarGrid({
   onDayClick,
   onPostClick,
   onReschedule,
+  onOverflowClick,
 }: CalendarGridProps) {
   const days = useMemo(() => {
     const start = startOfWeek(startOfMonth(month));
@@ -77,6 +79,7 @@ export function CalendarGrid({
             posts={postsByDay.get(format(date, "yyyy-MM-dd")) ?? []}
             onDayClick={onDayClick}
             onPostClick={onPostClick}
+            onOverflowClick={onOverflowClick}
           />
         ))}
       </div>

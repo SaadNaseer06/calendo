@@ -21,6 +21,7 @@ interface PlanGeneratorProps {
 export function PlanGenerator({ brand, month, year, onSaved }: PlanGeneratorProps) {
   const [postsPerWeek, setPostsPerWeek] = useState(5);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [plan, setPlan] = useState<MonthlyPlan | null>(null);
 
   const generate = async () => {
@@ -55,33 +56,38 @@ export function PlanGenerator({ brand, month, year, onSaved }: PlanGeneratorProp
 
   const saveAll = async () => {
     if (!plan) return;
-    const posts = plan.posts.map((p: GeneratedPlanPost) => {
-      const scheduled = setDate(new Date(year, month - 1, 1), p.day);
-      scheduled.setHours(10, 0, 0, 0);
-      return {
-        title: p.title,
-        caption: p.caption,
-        hashtags: p.hashtags,
-        platforms: p.platforms,
-        postType: p.postType,
-        scheduledAt: scheduled.toISOString(),
-        status: "PLANNED",
-        aiGenerated: true,
-        designerNote: p.designerNote,
-        rationale: p.rationale,
-      };
-    });
+    setSaving(true);
+    try {
+      const posts = plan.posts.map((p: GeneratedPlanPost) => {
+        const scheduled = setDate(new Date(year, month - 1, 1), p.day);
+        scheduled.setHours(10, 0, 0, 0);
+        return {
+          title: p.title,
+          caption: p.caption,
+          hashtags: p.hashtags,
+          platforms: p.platforms,
+          postType: p.postType,
+          scheduledAt: scheduled.toISOString(),
+          status: "PLANNED",
+          aiGenerated: true,
+          designerNote: p.designerNote,
+          rationale: p.rationale,
+        };
+      });
 
-    const res = await fetch("/api/posts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ brandId: brand.id, month, year, posts }),
-    });
-    const json = (await res.json()) as { error: string | null };
-    if (json.error) toast.error(json.error);
-    else {
+      const res = await fetch("/api/posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ brandId: brand.id, month, year, posts }),
+      });
+      const json = (await res.json()) as { error: string | null };
+      if (!res.ok || json.error) throw new Error(json.error ?? "Failed to save");
       toast.success("Plan saved to calendar");
       onSaved();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to save plan");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -139,7 +145,9 @@ export function PlanGenerator({ brand, month, year, onSaved }: PlanGeneratorProp
               </Card>
             ))}
           </div>
-          <Button onClick={saveAll}>Save All to Calendar</Button>
+          <Button onClick={saveAll} disabled={saving}>
+            {saving ? "Saving..." : "Save All to Calendar"}
+          </Button>
         </div>
       )}
     </div>

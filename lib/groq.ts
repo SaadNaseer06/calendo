@@ -4,6 +4,9 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
+/** Groq retired llama-3.3-70b-versatile (Aug 2026). Override with GROQ_MODEL if needed. */
+const DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b";
+
 export async function groqChat(
   systemPrompt: string,
   userMessage: string,
@@ -13,9 +16,11 @@ export async function groqChat(
     throw new Error("GROQ_API_KEY is not configured");
   }
 
+  const model = process.env.GROQ_MODEL?.trim() || DEFAULT_GROQ_MODEL;
+
   try {
     const response = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model,
       max_tokens: maxTokens,
       messages: [
         { role: "system", content: systemPrompt },

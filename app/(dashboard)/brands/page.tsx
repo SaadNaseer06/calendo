@@ -25,6 +25,10 @@ export default function BrandsPage() {
     niche: string;
     description?: string;
     brandVoice?: string;
+    logoUrl?: string;
+    websiteUrl?: string;
+    ga4MeasurementId?: string;
+    ga4PropertyId?: string;
     contentPillars: string[];
     platforms: string[];
   }) => {

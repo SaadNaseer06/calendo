@@ -91,7 +91,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-xs text-[var(--text-secondary)]">
-          Dev sign-in — no password. Your account is created on first visit.
+          Sign in with your work email to access your content calendar.
         </p>
       </motion.div>
     </div>

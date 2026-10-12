@@ -36,11 +36,15 @@ export function BrandProvider({ children }: { children: React.ReactNode }) {
       if (json.data) {
         setBrands(json.data);
         setActiveBrandId((current) => {
-          if (current) return current;
-          if (json.data!.length === 0) return null;
+          const list = json.data!;
+          if (list.length === 0) {
+            localStorage.removeItem("calendo-active-brand");
+            return null;
+          }
+          if (current && list.some((b) => b.id === current)) return current;
           const stored = localStorage.getItem("calendo-active-brand");
-          const found = json.data!.find((b) => b.id === stored);
-          return found?.id ?? json.data![0].id;
+          const found = list.find((b) => b.id === stored);
+          return found?.id ?? list[0].id;
         });
       }
     } finally {

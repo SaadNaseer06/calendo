@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Topbar } from "@/components/layout/topbar";
 import { PlanGenerator } from "@/components/ai/plan-generator";
@@ -15,11 +16,16 @@ import Link from "next/link";
 
 export default function AiStudioPage() {
   const { activeBrand } = useBrand();
+  const queryClient = useQueryClient();
   const [tab, setTab] = useState("plan");
   const [prefilledTopic, setPrefilledTopic] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [draft, setDraft] = useState<Partial<import("@/types").Post> | null>(null);
   const now = new Date();
+
+  const invalidatePosts = () => {
+    void queryClient.invalidateQueries({ queryKey: ["posts"] });
+  };
 
   const handleAddToCalendar = (result: SinglePostResult) => {
     setDraft({
@@ -42,7 +48,10 @@ export default function AiStudioPage() {
       <div className="flex flex-1 flex-col">
         <Topbar title="AI Studio" />
         <div className="flex flex-1 items-center justify-center text-[var(--text-secondary)]">
-          <Link href="/brands" className="text-[var(--accent-brand)] hover:underline">Create a brand</Link> first.
+          <Link href="/brands" className="text-[var(--accent-brand)] hover:underline">
+            Create a brand
+          </Link>{" "}
+          first.
         </div>
       </div>
     );
@@ -64,7 +73,7 @@ export default function AiStudioPage() {
               brand={activeBrand}
               month={now.getMonth() + 1}
               year={now.getFullYear()}
-              onSaved={() => {}}
+              onSaved={invalidatePosts}
             />
           </TabsContent>
           <TabsContent value="post" className="mt-6">
@@ -93,7 +102,11 @@ export default function AiStudioPage() {
         onOpenChange={setDrawerOpen}
         post={draft}
         brandId={activeBrand.id}
-        onSaved={() => setDraft(null)}
+        brand={activeBrand}
+        onSaved={() => {
+          setDraft(null);
+          invalidatePosts();
+        }}
       />
     </div>
   );

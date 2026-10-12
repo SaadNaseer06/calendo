@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +29,10 @@ export function PostGenerator({ brand, prefilledTopic, onAddToCalendar }: PostGe
   const [tone, setTone] = useState("engaging");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<SinglePostResult | null>(null);
+
+  useEffect(() => {
+    if (prefilledTopic) setTopic(prefilledTopic);
+  }, [prefilledTopic]);
 
   const generate = async () => {
     setLoading(true);

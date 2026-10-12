@@ -3,8 +3,10 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // Direct (non-pooled) connection — required for migrations / db push with Supabase pooler
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -54,19 +56,33 @@ model VerificationToken {
 }
 
 model Brand {
-  id             String       @id @default(cuid())
-  name           String
-  niche          String
-  description    String?
-  brandVoice     String?
-  contentPillars String       @default("[]")
-  platforms      String       @default("[]")
-  logoUrl        String?
-  userId         String
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  posts          Post[]
-  shareTokens    ShareToken[]
-  createdAt      DateTime     @default(now())
+  id               String             @id @default(cuid())
+  name             String
+  niche            String
+  description      String?
+  brandVoice       String?
+  contentPillars   String             @default("[]")
+  platforms        String             @default("[]")
+  logoUrl          String?
+  websiteUrl       String?
+  ga4MeasurementId String?
+  ga4PropertyId    String?
+  userId           String
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  posts            Post[]
+  shareTokens      ShareToken[]
+  websiteSnapshots WebsiteSnapshot[]
+  createdAt        DateTime           @default(now())
+}
+
+model WebsiteSnapshot {
+  id          String   @id @default(cuid())
+  brandId     String
+  brand       Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  seoScore    Int
+  seoReport   String
+  trafficData String?
+  capturedAt  DateTime @default(now())
 }
 
 model Post {
